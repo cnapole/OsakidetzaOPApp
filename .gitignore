@@ -1,0 +1,21 @@
+# Project memory and documentation
+.claude
+CLAUDE.md
+interview.md
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Build artifacts
+*.o
+*.so

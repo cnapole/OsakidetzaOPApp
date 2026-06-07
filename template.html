@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f3d3e">
+<title>Test OPE Enfermería · Osakidetza</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap');
+:root{
+  --ink:#10302f; --bg:#f3efe4; --card:#fbf8ef; --line:#d9d2bf;
+  --teal:#0f3d3e; --teal2:#1d6c5f; --gold:#c98a2b;
+  --ok:#1d7d52; --okbg:#e3f1e6; --bad:#b23b3b; --badbg:#f6e2df;
+  --muted:#6f6a5b;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);
+  font-family:'Newsreader',Georgia,serif;font-size:18px;line-height:1.5;
+  background-image:radial-gradient(circle at 12% -10%,#e9e3d2 0,transparent 45%),radial-gradient(circle at 100% 0,#e7efe6 0,transparent 40%);
+  min-height:100dvh;padding-bottom:env(safe-area-inset-bottom)}
+.wrap{max-width:680px;margin:0 auto;padding:18px 16px 90px}
+h1,h2,h3,.disp{font-family:'Fraunces',Georgia,serif;font-weight:600;letter-spacing:-.01em}
+.top{display:flex;align-items:center;gap:12px;margin:4px 0 18px}
+.logo{width:38px;height:38px;border-radius:11px;background:var(--teal);color:#f3efe4;
+  display:grid;place-items:center;font-family:'Fraunces';font-weight:600;font-size:20px;flex:none;
+  box-shadow:0 4px 14px rgba(15,61,62,.28)}
+.top h1{font-size:20px;margin:0;line-height:1.1}
+.top small{display:block;font-family:'Newsreader';font-weight:400;color:var(--muted);font-size:13px;letter-spacing:.02em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;
+  box-shadow:0 1px 0 #fff inset,0 10px 30px -22px rgba(16,48,47,.5)}
+.hero{margin-bottom:16px}
+.hero h2{font-size:27px;margin:.1em 0 .35em;line-height:1.08}
+.hero p{margin:0;color:var(--muted)}
+.label{font-family:'Fraunces';font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--teal2);margin:18px 0 8px}
+.seg{display:flex;gap:8px;flex-wrap:wrap}
+.chip{flex:1 1 auto;min-width:64px;text-align:center;padding:11px 10px;border:1px solid var(--line);
+  border-radius:12px;background:#fff;color:var(--ink);font-family:'Fraunces';font-weight:500;font-size:15px;cursor:pointer;transition:.15s}
+.chip.on{background:var(--teal);color:#f3efe4;border-color:var(--teal)}
+.chip.alt.on{background:var(--gold);border-color:var(--gold);color:#2a1d05}
+.chip:not(.on):hover{background:#f5f0e8;border-color:#c4bda8}
+.chip:active{opacity:.8}
+.btn{display:block;width:100%;margin-top:18px;padding:15px;border:none;border-radius:14px;
+  background:var(--teal);color:#f6f2e6;font-family:'Fraunces';font-weight:600;font-size:18px;cursor:pointer;
+  box-shadow:0 8px 20px -10px rgba(15,61,62,.7);transition:opacity .12s,box-shadow .12s}
+.btn.ghost{background:#fff;color:var(--teal);border:1px solid var(--line);box-shadow:none}
+.btn.gold{background:var(--gold);color:#2a1d05;box-shadow:0 8px 20px -10px rgba(201,138,43,.7)}
+.btn:hover:not(:disabled){opacity:.88}
+.btn:active:not(:disabled){opacity:.75;box-shadow:none}
+.btn:disabled{opacity:.4;cursor:default}
+.opt:not(:disabled):hover{background:#f5f0e8;border-color:#c4bda8}
+.opt:not(:disabled):active{opacity:.85}
+/* stats + session history */
+.stat{display:flex;gap:10px;margin-top:14px}
+.stat .b{flex:1;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;text-align:center}
+.stat .b b{font-family:'Fraunces';font-size:22px;display:block}
+.stat .b span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.hist{margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
+.hist-title{font-family:'Fraunces';font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:6px}
+.hist-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:14px;border-bottom:1px solid #ede7d4}
+.hist-row:last-child{border-bottom:none}
+.hist-pct{font-family:'Fraunces';font-weight:600;font-size:15px}
+.hist-pct.good{color:var(--ok)}
+.hist-pct.mid{color:var(--gold)}
+.hist-pct.low{color:var(--bad)}
+/* progress bar */
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom));z-index:5}
+.bar .inner{max-width:680px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.bar .track{flex:1;height:7px;background:#e4ddc9;border-radius:99px;overflow:hidden}
+.bar .fill{height:100%;background:linear-gradient(90deg,var(--teal2),var(--teal));border-radius:99px;transition:width .25s}
+.bar .meta{font-family:'Fraunces';font-size:14px;white-space:nowrap}
+/* question */
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.qnum{font-family:'Fraunces';font-size:13px;letter-spacing:.06em;color:var(--teal2)}
+.badge{font-family:'Fraunces';font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--gold);color:#2a1d05;padding:3px 9px;border-radius:99px}
+.q{font-family:'Fraunces';font-weight:500;font-size:22px;line-height:1.22;margin:0 0 16px}
+.opt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;
+  background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 14px;margin-bottom:11px;
+  font-family:'Newsreader';font-size:17px;line-height:1.35;color:var(--ink);cursor:pointer;transition:.12s}
+.opt .k{flex:none;width:27px;height:27px;border-radius:8px;background:#efe9d8;color:var(--teal);
+  display:grid;place-items:center;font-family:'Fraunces';font-weight:600;font-size:14px;margin-top:1px}
+.opt.ok{background:var(--okbg);border-color:var(--ok)}
+.opt.ok .k{background:var(--ok);color:#fff}
+.opt.bad{background:var(--badbg);border-color:var(--bad)}
+.opt.bad .k{background:var(--bad);color:#fff}
+.opt.dim{opacity:.55}
+.opt:disabled{cursor:default}
+.nav{display:flex;gap:10px;margin-top:6px}
+.nav .btn{margin-top:0}
+.hint{color:var(--muted);font-size:14px;margin:6px 2px 0;text-align:center;min-height:20px}
+.search{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;
+  font-family:'Newsreader';font-size:16px;color:var(--ink)}
+.searchwrap{margin-top:10px;display:none}
+.searchwrap.show{display:block}
+.foot{margin-top:22px;color:var(--muted);font-size:12px;text-align:center;line-height:1.5}
+/* result ring */
+.ring{--p:0;width:128px;height:128px;border-radius:50%;margin:6px auto 4px;
+  background:conic-gradient(var(--teal) calc(var(--p)*1%),#e4ddc9 0);display:grid;place-items:center}
+.ring .in{width:96px;height:96px;border-radius:50%;background:var(--card);display:grid;place-items:center;text-align:center}
+.ring b{font-family:'Fraunces';font-size:30px;line-height:1}
+.ring span{font-size:12px;color:var(--muted)}
+.link{background:none;border:none;color:var(--teal2);font-family:'Newsreader';font-size:15px;text-decoration:underline;cursor:pointer;padding:6px}
+.hidden{display:none!important}
+/* full review */
+.rev-item{padding:16px 0;border-bottom:1px solid var(--line)}
+.rev-item:last-child{border-bottom:none}
+.rev-num{font-family:'Fraunces';font-size:12px;color:var(--muted);margin-bottom:5px}
+.rev-badge{font-family:'Fraunces';font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--gold);color:#2a1d05;padding:2px 7px;border-radius:99px;margin-left:6px;vertical-align:middle}
+.rev-q{font-family:'Fraunces';font-size:16px;font-weight:500;margin:0 0 10px;line-height:1.25}
+.rev-opt{display:flex;gap:8px;align-items:flex-start;font-size:14px;line-height:1.3;
+  padding:6px 10px;border-radius:10px;margin-bottom:5px}
+.rev-opt .k{flex:none;width:22px;height:22px;border-radius:6px;background:#efe9d8;
+  display:grid;place-items:center;font-family:'Fraunces';font-size:11px;font-weight:600;color:var(--teal);margin-top:1px}
+.rev-opt.ok{background:var(--okbg)}
+.rev-opt.bad{background:var(--badbg)}
+.rev-opt.ok .k{background:var(--ok);color:#fff}
+.rev-opt.bad .k{background:var(--bad);color:#fff}
+.rev-skip{font-size:13px;color:var(--muted);padding:2px 0 6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="logo">E</div>
+    <h1>Test OPE Enfermería<small>Temario específico · Osakidetza 23·24·25 — 500 preguntas</small></h1>
+  </div>
+
+  <!-- INICIO -->
+  <section id="home">
+    <div class="card hero">
+      <h2>Prepárate a tu ritmo</h2>
+      <p>500 preguntas con respuesta razonada, modo estudio y modo examen. Funciona sin conexión.</p>
+      <div class="stat" id="homeStats"></div>
+      <div class="hist hidden" id="histWrap">
+        <div class="hist-title">Últimas sesiones</div>
+        <div id="histList"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <div class="label">Modo</div>
+      <div class="seg" id="modeSeg">
+        <button class="chip on" data-mode="study">Estudio</button>
+        <button class="chip" data-mode="test">Examen</button>
+      </div>
+
+      <div class="label">Nº de preguntas</div>
+      <div class="seg" id="countSeg">
+        <button class="chip" data-n="10">10</button>
+        <button class="chip on" data-n="25">25</button>
+        <button class="chip" data-n="50">50</button>
+        <button class="chip" data-n="100">100</button>
+        <button class="chip" data-n="0">Todas</button>
+      </div>
+
+      <div class="label">Opciones</div>
+      <div class="seg">
+        <button class="chip alt on" id="shuffleChip">Barajar</button>
+        <button class="chip" id="impugChip">Solo impugnables</button>
+        <button class="chip" id="searchToggle">Buscar / ir a nº</button>
+      </div>
+      <div class="searchwrap" id="searchWrap">
+        <input class="search" id="searchInput" placeholder="Palabra clave o número de pregunta (1-500)…">
+      </div>
+
+      <button class="btn" id="startBtn">Empezar</button>
+      <button class="btn gold hidden" id="reviewBtn">Repasar mis fallos (<span id="failCount">0</span>)</button>
+
+      <div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--line)">
+        <button class="btn gold" id="examOficialBtn">Examen Oficial
+          <span style="display:block;font-size:13px;font-weight:400;font-family:'Newsreader';margin-top:3px;color:rgba(42,29,5,.65)">100 preguntas aleatorias · 90 min · sin volver atrás</span>
+        </button>
+      </div>
+    </div>
+    <p class="foot">Material recopilado por UGT para estudio del proceso OPE 23·24·25.<br>UGT declina responsabilidad sobre el contenido y posibles errores u omisiones.<br>Algunas preguntas figuran como <b>IMPUGNABLE</b> según el documento original.</p>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="hidden">
+    <div class="card">
+      <div class="qhead">
+        <span class="qnum" id="qPos"></span>
+        <span class="badge hidden" id="impBadge">Impugnable</span>
+      </div>
+      <h3 class="q" id="qText"></h3>
+      <div id="opts"></div>
+      <p class="hint" id="hint"></p>
+      <div class="nav">
+        <button class="btn ghost" id="prevBtn" style="flex:.7">Anterior</button>
+        <button class="btn" id="nextBtn" style="flex:1.3">Siguiente</button>
+      </div>
+      <button class="link" id="quitBtn" style="display:block;margin:10px auto 0">Salir al inicio</button>
+    </div>
+  </section>
+
+  <!-- RESULTADO -->
+  <section id="result" class="hidden">
+    <div class="card" style="text-align:center">
+      <div class="label" style="text-align:center">Resultado</div>
+      <div class="ring" id="ring"><div class="in"><div><b id="scorePct">0%</b><span id="scoreRaw"></span></div></div></div>
+      <h2 class="disp" id="verdict" style="font-size:24px;margin:.2em 0"></h2>
+      <p style="color:var(--muted);margin:.2em 0 0" id="resMsg"></p>
+      <button class="btn" id="showReviewBtn">Ver revisión completa</button>
+      <button class="btn ghost" id="againBtn">Otra ronda</button>
+      <button class="link" id="homeBtn" style="display:block;margin:12px auto 0">Volver al inicio</button>
+    </div>
+  </section>
+
+  <!-- REVISIÓN COMPLETA -->
+  <section id="review" class="hidden">
+    <div class="card">
+      <div class="label">Revisión completa</div>
+      <div id="reviewList"></div>
+      <button class="btn" id="reviewHomeBtn" style="margin-top:18px">Volver al inicio</button>
+    </div>
+  </section>
+</div>
+
+<!-- BARRA PROGRESO -->
+<div class="bar hidden" id="progBar">
+  <div class="inner">
+    <div class="meta" id="progMeta">0 / 0</div>
+    <div class="track"><div class="fill" id="progFill" style="width:0%"></div></div>
+    <div class="meta" id="progScore"></div>
+  </div>
+</div>
+
+<script>
+/* ===== DATOS (incrustados) ===== */
+const DB = __DATA__;
+
+/* ===== persistencia ===== */
+const store = {
+  get(k,d){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } },
+  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+};
+let fails = new Set(store.get('ope_fails',[]));
+let stats = store.get('ope_stats',{seen:0,correct:0});
+let sessions = store.get('ope_history',[]);
+
+/* ===== estado ===== */
+let cfg={mode:'study',n:25,shuffle:true,filterIds:null,impugOnly:false,examMode:false};
+let deck=[], idx=0, answers={}, order={};
+let timerInterval=null, timerSecs=0;
+
+const $=s=>document.querySelector(s);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;};
+
+/* ===== inicio ===== */
+function refreshHome(){
+  $('#failCount').textContent=fails.size;
+  $('#reviewBtn').classList.toggle('hidden',fails.size===0);
+  const acc = stats.seen? Math.round(stats.correct/stats.seen*100):0;
+  $('#homeStats').innerHTML =
+    `<div class="b"><b>500</b><span>preguntas</span></div>
+     <div class="b"><b>${stats.seen}</b><span>respondidas</span></div>
+     <div class="b"><b>${acc}%</b><span>acierto</span></div>`;
+
+  const hw=$('#histWrap'), hl=$('#histList');
+  if(!sessions.length){ hw.classList.add('hidden'); return; }
+  hw.classList.remove('hidden');
+  hl.innerHTML=sessions.slice().reverse().slice(0,5).map(s=>{
+    const cls=s.pct>=70?'good':s.pct>=50?'mid':'low';
+    return `<div class="hist-row">
+      <span style="color:var(--muted)">${s.date} · ${s.total} preguntas</span>
+      <span class="hist-pct ${cls}">${s.pct}%</span>
+    </div>`;
+  }).join('');
+}
+
+document.querySelectorAll('#modeSeg .chip').forEach(c=>c.onclick=()=>{
+  document.querySelectorAll('#modeSeg .chip').forEach(x=>x.classList.remove('on'));
+  c.classList.add('on'); cfg.mode=c.dataset.mode;
+});
+document.querySelectorAll('#countSeg .chip').forEach(c=>c.onclick=()=>{
+  document.querySelectorAll('#countSeg .chip').forEach(x=>x.classList.remove('on'));
+  c.classList.add('on'); cfg.n=+c.dataset.n;
+});
+$('#shuffleChip').onclick=function(){this.classList.toggle('on');cfg.shuffle=this.classList.contains('on');};
+$('#impugChip').onclick=function(){this.classList.toggle('on');cfg.impugOnly=this.classList.contains('on');};
+$('#searchToggle').onclick=function(){this.classList.toggle('on');$('#searchWrap').classList.toggle('show');if(!this.classList.contains('on'))$('#searchInput').value='';};
+
+function buildDeck(ids){
+  let pool = ids ? DB.filter(q=>ids.has(q.id)) : DB.slice();
+  if(cfg.impugOnly && !ids) pool=pool.filter(q=>q.impugnable);
+  if(cfg.shuffle) pool=shuffle(pool);
+  if(cfg.n>0 && !ids) pool=pool.slice(0,cfg.n);
+  deck=pool; idx=0; answers={}; order={};
+  deck.forEach(q=>{ order[q.id]=cfg.shuffle? shuffle(q.options): q.options.slice(); });
+}
+
+$('#startBtn').onclick=()=>{
+  cfg.examMode=false;
+  const term=$('#searchInput').value.trim();
+  if(term){
+    let ids=new Set();
+    if(/^\d+$/.test(term)){ ids.add(+term); }
+    else{ const t=term.toLowerCase();
+      DB.forEach(q=>{ if(q.question.toLowerCase().includes(t)||q.options.some(o=>o.text.toLowerCase().includes(t))) ids.add(q.id); }); }
+    if(!ids.size){ alert('Sin resultados para "'+term+'".'); return; }
+    buildDeck(ids);
+  } else buildDeck(null);
+  if(!deck.length){ alert('No hay preguntas.'); return; }
+  startQuiz();
+};
+$('#reviewBtn').onclick=()=>{ cfg.examMode=false; buildDeck(new Set(fails)); startQuiz(); };
+$('#examOficialBtn').onclick=()=>{
+  cfg.examMode=true; cfg.mode='test'; cfg.shuffle=true; cfg.n=100; cfg.impugOnly=false; cfg.filterIds=null;
+  buildDeck(null);
+  startQuiz();
+};
+
+/* ===== quiz ===== */
+const SECS=['home','quiz','result','review'];
+function show(sec){ SECS.forEach(s=>$('#'+s).classList.toggle('hidden',s!==sec)); }
+
+function startQuiz(){
+  show('quiz');
+  $('#progBar').classList.remove('hidden');
+  if(cfg.examMode) startTimer(90*60); else stopTimer();
+  render();
+}
+
+/* ===== temporizador ===== */
+function startTimer(secs){
+  stopTimer();
+  timerSecs=secs;
+  const el=$('#progScore');
+  function tick(){
+    const m=Math.floor(timerSecs/60), s=timerSecs%60;
+    el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+    el.style.color=timerSecs<=300?'var(--bad)':'';
+    el.style.fontWeight=timerSecs<=300?'700':'';
+    if(timerSecs===0){ stopTimer(); finish(); return; }
+    timerSecs--;
+  }
+  tick();
+  timerInterval=setInterval(tick,1000);
+}
+function stopTimer(){
+  if(timerInterval){ clearInterval(timerInterval); timerInterval=null; }
+  const el=$('#progScore'); el.style.color=''; el.style.fontWeight='';
+}
+
+function render(){
+  const q=deck[idx];
+  $('#qPos').textContent=`Pregunta ${idx+1} de ${deck.length}  ·  nº ${q.id}`;
+  $('#impBadge').classList.toggle('hidden',!q.impugnable);
+  $('#qText').textContent=q.question+(q.impugnable?' [IMPUGNABLE]':'');
+  const answered=idx in answers;
+  const opts=$('#opts'); opts.innerHTML='';
+  order[q.id].forEach(o=>{
+    const b=document.createElement('button');
+    b.className='opt'; b.innerHTML=`<span class="k">${o.letter}</span><span>${o.text}</span>`;
+    if(answered || cfg.mode==='study' && answers[idx]==='revealed'){
+      b.disabled=true;
+      if(o.correct) b.classList.add('ok');
+      else if(answers[idx]===o.letter) b.classList.add('bad');
+      else b.classList.add('dim');
+    } else {
+      b.onclick=()=>choose(o);
+    }
+    opts.appendChild(b);
+  });
+  const h=$('#hint');
+  if(cfg.mode==='study' && !(idx in answers)){ h.textContent='Modo estudio · pulsa una opción para ver la correcta.'; }
+  else if(answered){
+    const picked=answers[idx];
+    const corr=q.options.filter(o=>o.correct).map(o=>o.letter).join(' y ');
+    if(picked==='revealed') h.textContent='Respuesta correcta: '+corr+'.';
+    else h.textContent=q.options.find(o=>o.letter===picked&&o.correct)?'¡Correcta!':'Fallaste · correcta: '+corr+'.';
+  } else h.textContent='';
+  $('#prevBtn').style.display=cfg.examMode?'none':'';
+  $('#prevBtn').disabled=idx===0;
+  $('#nextBtn').textContent=idx===deck.length-1?(cfg.mode==='test'?'Ver resultado':'Terminar'):'Siguiente';
+  updateProg();
+}
+
+function choose(o){
+  const q=deck[idx];
+  if(cfg.mode==='study'){ answers[idx]='revealed'; }
+  else{
+    answers[idx]=o.letter;
+    stats.seen++; if(o.correct){stats.correct++; fails.delete(q.id);} else fails.add(q.id);
+    store.set('ope_stats',stats); store.set('ope_fails',[...fails]);
+  }
+  render();
+}
+$('#nextBtn').onclick=()=>{ if(idx<deck.length-1){idx++;render();} else finish(); };
+$('#prevBtn').onclick=()=>{ if(idx>0){idx--;render();} };
+$('#quitBtn').onclick=()=>{ if(confirm('¿Salir al inicio? Se perderá esta ronda.')) goHome(); };
+
+function updateProg(){
+  $('#progMeta').textContent=`${idx+1} / ${deck.length}`;
+  $('#progFill').style.width=((idx+1)/deck.length*100)+'%';
+  if(!cfg.examMode && cfg.mode==='test'){
+    let ok=0; Object.entries(answers).forEach(([i,l])=>{ if(deck[i].options.find(o=>o.letter===l&&o.correct))ok++; });
+    $('#progScore').textContent=`${ok} ✓`;
+  } else if(!cfg.examMode){
+    $('#progScore').textContent='';
+  }
+}
+
+/* ===== resultado ===== */
+function finish(){
+  if(cfg.mode!=='test'){ goHome(); return; }
+  stopTimer();
+  let ok=0;
+  deck.forEach((q,i)=>{ const l=answers[i]; if(l&&q.options.find(o=>o.letter===l&&o.correct))ok++; });
+  const total=deck.length, pct=Math.round(ok/total*100);
+
+  const now=new Date();
+  const dateStr=now.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'2-digit'});
+  sessions.push({date:dateStr,ok,total,pct});
+  if(sessions.length>20) sessions=sessions.slice(-20);
+  store.set('ope_history',sessions);
+
+  show('result'); $('#progBar').classList.add('hidden');
+  $('#ring').style.setProperty('--p',pct);
+  $('#scorePct').textContent=pct+'%'; $('#scoreRaw').textContent=ok+' / '+total;
+  let v,m;
+  if(pct>=90){v='Excelente';m='Dominio del temario. Sigue afinando los matices.';}
+  else if(pct>=70){v='Muy bien';m='Buen nivel. Repasa los fallos para consolidar.';}
+  else if(pct>=50){v='Vas avanzando';m='Base sólida; insiste en las áreas flojas.';}
+  else{v='A seguir';m='Repasa con calma; el modo estudio ayuda mucho.';}
+  $('#verdict').textContent=v; $('#resMsg').textContent=m;
+  refreshHome();
+}
+
+$('#showReviewBtn').onclick=showReview;
+$('#againBtn').onclick=()=>{ buildDeck(cfg.filterIds); startQuiz(); };
+$('#homeBtn').onclick=goHome;
+$('#reviewHomeBtn').onclick=goHome;
+
+function goHome(){ show('home'); $('#progBar').classList.add('hidden'); stopTimer(); refreshHome(); }
+
+/* ===== revisión completa ===== */
+function showReview(){
+  const list=$('#reviewList');
+  list.innerHTML='';
+  deck.forEach((q,i)=>{
+    const myLetter=answers[i];
+    const answered=myLetter!==undefined;
+    const gotRight=answered&&q.options.find(o=>o.letter===myLetter&&o.correct);
+
+    const div=document.createElement('div');
+    div.className='rev-item';
+
+    const impTag=q.impugnable?`<span class="rev-badge">Impugnable</span>`:'';
+    let html=`<div class="rev-num">Pregunta ${i+1} · nº ${q.id}${impTag}</div>`;
+    html+=`<div class="rev-q">${q.question}</div>`;
+
+    if(!answered){
+      const corrOpts=q.options.filter(o=>o.correct);
+      html+=`<div class="rev-skip">Sin responder</div>`;
+      corrOpts.forEach(o=>{
+        html+=`<div class="rev-opt ok"><span class="k">${o.letter}</span><span>${o.text}</span></div>`;
+      });
+    } else if(gotRight){
+      const o=q.options.find(o=>o.letter===myLetter);
+      html+=`<div class="rev-opt ok"><span class="k">${o.letter}</span><span>${o.text}</span></div>`;
+    } else {
+      const picked=q.options.find(o=>o.letter===myLetter);
+      if(picked) html+=`<div class="rev-opt bad"><span class="k">${picked.letter}</span><span>${picked.text}</span></div>`;
+      q.options.filter(o=>o.correct).forEach(o=>{
+        html+=`<div class="rev-opt ok"><span class="k">${o.letter}</span><span>${o.text}</span></div>`;
+      });
+    }
+
+    div.innerHTML=html;
+    list.appendChild(div);
+  });
+  show('review');
+  window.scrollTo(0,0);
+}
+
+refreshHome();
+</script>
+</body>
+</html>
